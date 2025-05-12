@@ -57,11 +57,29 @@ function loadConfig() {
 
 document.addEventListener('DOMContentLoaded', () => {
   loadConfig();
+  
+  const observer = new MutationObserver((mutations) => {
+    for (const mutation of mutations) {
+      if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+        attachTextSelectionListeners();
+      }
+    }
+  });
+  
+  observer.observe(document.body, { childList: true, subtree: true });
+  
+  attachTextSelectionListeners();
 });
 
 loadConfig();
 
-document.addEventListener('mouseup', (event) => {
+function attachTextSelectionListeners() {
+  document.removeEventListener('mouseup', handleTextSelection);
+  document.addEventListener('mouseup', handleTextSelection);
+  console.log('テキスト選択リスナーを再アタッチしました');
+}
+
+function handleTextSelection(event) {
   console.log('Selection event triggered:', event.type);
   
   if (!config.extensionEnabled) {
@@ -83,43 +101,58 @@ document.addEventListener('mouseup', (event) => {
   }
   
   createReplyButton(selection, event);
-});
+}
 
 function createReplyButton(selection, event) {
-  const range = selection.getRangeAt(0);
-  const rect = range.getBoundingClientRect();
-  
-  console.log('Selection rect:', rect.left, rect.top, rect.right, rect.bottom);
-  
-  replyButton = document.createElement('button');
-  replyButton.textContent = '返信を生成する';
-  replyButton.id = 'gemini-reply-button';
-  replyButton.className = 'gemini-reply-button';
-  
-  const buttonTop = rect.bottom + window.scrollY + 10;
-  const buttonLeft = rect.left + window.scrollX;
-  
-  console.log('Button position stored:', buttonTop, buttonLeft);
-  
-  replyButton.style.position = 'absolute';
-  replyButton.style.left = `${buttonLeft}px`;
-  replyButton.style.top = `${buttonTop}px`;
-  replyButton.style.zIndex = '2147483647';
-  replyButton.style.backgroundColor = '#1DA1F2';
-  replyButton.style.color = 'white';
-  replyButton.style.border = 'none';
-  replyButton.style.borderRadius = '15px';
-  replyButton.style.padding = '8px 12px';
-  replyButton.style.fontSize = '14px';
-  replyButton.style.fontWeight = 'bold';
-  replyButton.style.cursor = 'pointer';
-  replyButton.style.boxShadow = '0 4px 8px rgba(0,0,0,0.3)'; // Enhanced shadow
-  
-  replyButton.addEventListener('click', handleReplyButtonClick);
-  
-  document.body.appendChild(replyButton);
-  
-  console.log('返信ボタンを追加しました');
+  try {
+    const range = selection.getRangeAt(0);
+    const rect = range.getBoundingClientRect();
+    
+    console.log('Selection rect:', rect.left, rect.top, rect.right, rect.bottom);
+    
+    replyButton = document.createElement('button');
+    replyButton.textContent = '返信を生成する';
+    replyButton.id = 'gemini-reply-button';
+    replyButton.className = 'gpt-reply-button';
+    
+    const buttonTop = event.clientY + window.scrollY + 10;
+    const buttonLeft = event.clientX + window.scrollX;
+    
+    console.log('Button position stored:', buttonTop, buttonLeft);
+    
+    replyButton.style.position = 'absolute';
+    replyButton.style.left = `${buttonLeft}px`;
+    replyButton.style.top = `${buttonTop}px`;
+    replyButton.style.zIndex = '2147483647';
+    replyButton.style.backgroundColor = '#1DA1F2';
+    replyButton.style.color = 'white';
+    replyButton.style.border = 'none';
+    replyButton.style.borderRadius = '15px';
+    replyButton.style.padding = '8px 12px';
+    replyButton.style.fontSize = '14px';
+    replyButton.style.fontWeight = 'bold';
+    replyButton.style.cursor = 'pointer';
+    replyButton.style.boxShadow = '0 4px 8px rgba(0,0,0,0.3)';
+    replyButton.style.transform = 'scale(1)';
+    replyButton.style.transition = 'transform 0.2s ease-in-out';
+    replyButton.style.animation = 'geminiButtonFadeIn 0.3s ease-in-out';
+    
+    document.body.appendChild(replyButton);
+    
+    console.log('返信ボタンを追加しました');
+    
+    replyButton.addEventListener('mouseenter', () => {
+      replyButton.style.transform = 'scale(1.05)';
+    });
+    
+    replyButton.addEventListener('mouseleave', () => {
+      replyButton.style.transform = 'scale(1)';
+    });
+    
+    replyButton.addEventListener('click', handleReplyButtonClick);
+  } catch (error) {
+    console.error('ボタン作成エラー:', error);
+  }
   
   setTimeout(() => {
     removeReplyButton();

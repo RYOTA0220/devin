@@ -5,8 +5,8 @@
   <title>Gemini Reply Generator</title>
   <style>
     body {
-      width: 250px;
-      padding: 15px;
+      width: 200px;
+      padding: 10px;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background-color: #f5f8fa;
       color: #14171a;
@@ -15,16 +15,17 @@
     
     .container {
       background-color: #fff;
-      border-radius: 10px;
-      padding: 15px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      padding: 10px;
+      box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
     }
     
     h1 {
       color: #1DA1F2;
       margin-top: 0;
-      font-size: 16px;
-      padding-bottom: 10px;
+      margin-bottom: 8px;
+      font-size: 14px;
+      padding-bottom: 8px;
       border-bottom: 1px solid #e1e8ed;
       text-align: center;
     }
@@ -33,14 +34,14 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 15px;
+      margin-bottom: 8px;
     }
     
     .toggle-switch {
       position: relative;
       display: inline-block;
-      width: 50px;
-      height: 24px;
+      width: 40px;
+      height: 20px;
     }
     
     .toggle-switch input {
@@ -57,19 +58,19 @@
       right: 0;
       bottom: 0;
       background-color: #ccc;
-      transition: .4s;
-      border-radius: 24px;
+      transition: .3s;
+      border-radius: 20px;
     }
     
     .slider:before {
       position: absolute;
       content: "";
-      height: 18px;
-      width: 18px;
+      height: 14px;
+      width: 14px;
       left: 3px;
       bottom: 3px;
       background-color: white;
-      transition: .4s;
+      transition: .3s;
       border-radius: 50%;
     }
     
@@ -78,11 +79,11 @@
     }
     
     input:checked + .slider:before {
-      transform: translateX(26px);
+      transform: translateX(20px);
     }
     
     .status {
-      font-size: 14px;
+      font-size: 12px;
       font-weight: bold;
     }
     
@@ -97,10 +98,10 @@
     .settings-link {
       display: block;
       text-align: center;
-      margin-top: 15px;
+      margin-top: 8px;
       color: #1DA1F2;
       text-decoration: none;
-      font-size: 14px;
+      font-size: 12px;
     }
     
     .settings-link:hover {
@@ -108,10 +109,10 @@
     }
     
     .footer {
-      margin-top: 15px;
+      margin-top: 8px;
       text-align: center;
       color: #657786;
-      font-size: 12px;
+      font-size: 10px;
     }
   </style>
 </head>
@@ -130,11 +131,11 @@
       </div>
     </div>
     
-    <a href="options.html" class="settings-link">詳細設定を開く</a>
+    <a href="options.html" class="settings-link">詳細設定</a>
   </div>
   
   <div class="footer">
-    Gemini Reply Generator v1.0.0
+    v1.0.0
   </div>
   
   <script src="popup.js"></script>

@@ -62,7 +62,10 @@ document.addEventListener('DOMContentLoaded', () => {
 loadConfig();
 
 document.addEventListener('mouseup', (event) => {
+  console.log('Selection event triggered:', event.type);
+  
   if (!config.extensionEnabled) {
+    console.log('拡張機能は無効化されています');
     return;
   }
   
@@ -71,7 +74,11 @@ document.addEventListener('mouseup', (event) => {
   const selection = window.getSelection();
   selectedText = selection.toString().trim();
   
+  console.log('Final selected text:', selectedText);
+  console.log('Text selected:', selectedText.length > 0 ? selectedText.substring(0, 30) + '...' : selectedText);
+  
   if (selectedText.length < config.minSelectedChars) {
+    console.log('Selected text too short or empty, min chars:', config.minSelectedChars);
     return;
   }
   
@@ -82,14 +89,21 @@ function createReplyButton(selection, event) {
   const range = selection.getRangeAt(0);
   const rect = range.getBoundingClientRect();
   
+  console.log('Selection rect:', rect.left, rect.top, rect.right, rect.bottom);
+  
   replyButton = document.createElement('button');
   replyButton.textContent = '返信を生成する';
   replyButton.id = 'gemini-reply-button';
   replyButton.className = 'gemini-reply-button';
   
+  const buttonTop = rect.bottom + window.scrollY + 10;
+  const buttonLeft = rect.left + window.scrollX;
+  
+  console.log('Button position stored:', buttonTop, buttonLeft);
+  
   replyButton.style.position = 'absolute';
-  replyButton.style.left = `${rect.right + window.scrollX + 5}px`;
-  replyButton.style.top = `${rect.bottom + window.scrollY + 5}px`;
+  replyButton.style.left = `${buttonLeft}px`;
+  replyButton.style.top = `${buttonTop}px`;
   replyButton.style.zIndex = '2147483647';
   replyButton.style.backgroundColor = '#1DA1F2';
   replyButton.style.color = 'white';
@@ -99,13 +113,13 @@ function createReplyButton(selection, event) {
   replyButton.style.fontSize = '14px';
   replyButton.style.fontWeight = 'bold';
   replyButton.style.cursor = 'pointer';
-  replyButton.style.boxShadow = '0 2px 5px rgba(0,0,0,0.2)';
+  replyButton.style.boxShadow = '0 4px 8px rgba(0,0,0,0.3)'; // Enhanced shadow
   
   replyButton.addEventListener('click', handleReplyButtonClick);
   
   document.body.appendChild(replyButton);
   
-  console.log('返信ボタンを表示しました');
+  console.log('返信ボタンを追加しました');
   
   setTimeout(() => {
     removeReplyButton();
